@@ -14,11 +14,15 @@ public class main {
 //		printAllPersons(sortByName(init()));
 //	printJubilar(init());
 //		firstLowRegister(init());
-		pintOdnofamilcy(init());
+//		pintOdnofamilcy(init());
 	
 //		wrightPersonToH2DB(init().get(5));
 	//	DeletePersonByID(6);//("lastName", "Test", 6 );
-//	printAllPersons(readFromH2DB());
+//Person OldP = new Person(2, "AAA", "BBB", 45);
+Person NewP = new Person(3,"CCC", "DDD", 44);
+//changePerson(OldP, NewP);
+DeletePerson(NewP);
+		printAllPersons(readFromH2DB());
 //	updatePersonByID(1, "aaa", "dasd", "15", "44");
 	
 	}
@@ -95,6 +99,25 @@ public class main {
 		}
 		
 	
+	public static void DeletePerson(Person P) throws Exception
+	{
+		Class.forName("org.h2.Driver");
+		
+		Connection conH2 = DriverManager.getConnection("jdbc:h2:~/test", "sa", "");
+	
+		Statement st = conH2.createStatement();
+		
+		ResultSet rs = st.executeQuery("SELECT * FROM PERSON");
+		
+			st.execute(
+					"DELETE FROM PERSON WHERE ID= "
+					+ String.valueOf(P.id) + " AND " 
+					+ "firstName= '" +String.valueOf(P.firstName) + "' AND " 
+					+ "lastName= '" +String.valueOf(P.lastName) + "' AND " 
+					+ "age= " +String.valueOf(P.age) + ";"
+					);
+	}
+	
 		public static void DeletePersonByID(int id) throws Exception
 		{
 			Class.forName("org.h2.Driver");
@@ -110,6 +133,35 @@ public class main {
 				st.execute(
 						"DELETE FROM PERSON WHERE ID= "
 						+ String.valueOf(id) + " ;"
+						);
+		}
+		
+		// change person in BD
+		public static void changePerson(Person OldP, Person NewP) throws Exception
+		{
+			Class.forName("org.h2.Driver");
+			
+			Connection conH2 = DriverManager.getConnection("jdbc:h2:~/test", "sa", "");
+		
+			Statement st = conH2.createStatement();
+			
+			ResultSet rs = st.executeQuery("SELECT * FROM PERSON");
+			
+			//Добавить, удалить, обновить персону в БД
+			
+				st.execute(
+						"UPDATE PERSON SET " 
+								+ "id= " + String.valueOf(NewP.id) + ", " 
+								+ "firstName= '" +String.valueOf(NewP.firstName) + "', " 
+								+ "lastName= '" +String.valueOf(NewP.lastName) + "', " 
+								+ "AGE= " +String.valueOf(NewP.age)  +
+								
+						" WHERE ID= "
+								
+								+ String.valueOf(OldP.id) + " AND " 
+								+ "firstName= '" +String.valueOf(OldP.firstName) + "' AND " 
+								+ "lastName= '" +String.valueOf(OldP.lastName) + "' AND " 
+								+ "AGE= " +String.valueOf(OldP.age) + ";"
 						);
 		}
 		
